@@ -1,0 +1,191 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0d12;
+}
+
+/* Main Container */
+main {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  background: #0b0d12;
+}
+
+/* Left & Right Containers */
+main .left,
+main .right {
+  position: relative;
+  width: 50%;
+  min-height: calc(100vh - 4rem);
+
+  border: 1px solid #292d38;
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Left Code Container */
+main .left {
+  background: #11141b;
+}
+
+/* Code Area */
+.left .code {
+  width: 100%;
+  height: 100%;
+
+  min-height: calc(100vh - 4rem);
+
+  padding: 2rem;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size: 40px 40px;
+
+  color: #d1d5db;
+
+  font-family: "Fira Code", Consolas, monospace;
+}
+.left .code,
+.code pre,
+.code pre code{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  border-radius: 0.7rem;
+  padding: 10px;
+}
+
+/* Review Button */
+.review {
+  position: absolute;
+
+  bottom: 1.5rem;
+  right: 1.5rem;
+
+  padding: 0.75rem 1.8rem;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #8b5cf6
+  );
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 25px rgba(99, 102, 241, 0.35);
+
+  transition: all 0.25s ease;
+}
+
+.review:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 12px 30px rgba(139, 92, 246, 0.55);
+}
+
+.review:active {
+  transform: translateY(0);
+}
+
+/* Right AI Review Container */
+main .right {
+  background: #151821;
+
+  border-color: #303544;
+}
+
+/* Subtle glow on right side */
+main .right::before {
+  content: "";
+
+  position: absolute;
+
+  top: -150px;
+  right: -150px;
+
+  width: 300px;
+  height: 300px;
+
+  background: rgba(99, 102, 241, 0.15);
+
+  filter: blur(80px);
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  main {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  main .left,
+  main .right {
+    width: 100%;
+    min-height: 450px;
+  }
+
+  .review {
+    bottom: 1rem;
+    right: 1rem;
+   
+  }
+}
+.review.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.review.loading::after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-left: 8px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
