@@ -1,6 +1,7 @@
 const express = require('express')
-const aiRoutes = require('./routes/ai.route')
 const cors = require('cors')
+
+const aiRoutes = require('./routes/ai.route')
 
 const app = express()
 
@@ -8,7 +9,7 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.send('heey')
+    res.send('AI Code Reviewer Backend is running')
 })
 
 app.use('/ai', aiRoutes)
