@@ -46,17 +46,16 @@ function App(){
       <div className="left">
         <div className="code">
           <Editor
-        value={code}
-        onValueChange={code => setcode(code)}
-        highlight={code =>
+          value={code}
+          onValueChange={code => setcode(code)}
+          highlight={code =>
           prism.highlight(code, prism.languages.javascript, "javascript")
-        }
-        padding={10}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 20,
-          padding:10,
-      
+          }
+          padding={10}
+          style={{
+          fontFamily: '"Fira Code", "Fira Mono", monospace',
+          fontSize: 15,
+          lineHeight: 1.5,
           border: "1px solid #ddd",
           borderRadius: 5,
           height: "100%",
