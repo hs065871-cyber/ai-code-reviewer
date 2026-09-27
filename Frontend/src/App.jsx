@@ -26,10 +26,9 @@ function App(){
         setLoading(true)
 
         const response = await axios.post(
-            'http://localhost:3000/ai/get-review',
-            { code }
+          'https://ai-code-reviewer-fps5.onrender.com/ai/get-review',
+          { code }
         )
-
         setreview(response.data)
 
     } catch (error) {
