@@ -54,7 +54,7 @@ function App(){
         padding={10}
         style={{
           fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 25,
+          fontSize: 20,
           padding:10,
       
           border: "1px solid #ddd",
