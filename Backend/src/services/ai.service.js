@@ -7,71 +7,46 @@ const ai = new GoogleGenAI({
 async function generateContent(code) {
 
     const prompt = `
-You are a senior JavaScript developer and professional code reviewer.
+You are a professional senior code reviewer.
 
-Carefully review the JavaScript code provided below.
+Analyze this JavaScript code:
 
-CODE TO REVIEW:
 ${code}
 
-Provide a clear, detailed but concise code review using the following structure:
+Give a clear code review with:
+1. Bugs and errors
+2. Code quality issues
+3. Improvements
+4. Corrected code
+5. Short developer tips
 
-## 🔴 1. Bugs & Errors
-Identify all important syntax errors, runtime errors, logical errors, or incorrect behavior.
-
-For each important issue:
-- Clearly mention what is wrong.
-- Explain why it happens.
-- Explain what could happen if it is not fixed.
-
-If there are no critical bugs, say:
-"No critical bugs found."
-
-## 🟡 2. Code Quality
-Review the code for:
-- Readability
-- Naming
-- Formatting and indentation
-- Code structure
-- Maintainability
-- JavaScript best practices
-
-Explain the most important issues with short examples where useful.
-
-## 🔵 3. Improvements
-Suggest practical improvements that would make the code:
-- Cleaner
-- More readable
-- More reliable
-- Easier to maintain
-
-Explain why each improvement is useful.
-
-## 🟢 4. Corrected Code
-Provide a clean and improved version of the code.
-
-Only change things that actually need improvement.
-Keep the solution understandable for a beginner.
-
-## 💡 5. Developer Tip
-Give 2-3 useful tips related specifically to the mistakes or concepts found in this code.
-
-IMPORTANT:
-- Be professional and constructive.
-- Explain technical concepts in simple language.
-- Do not invent errors.
-- Do not repeat the entire submitted code unnecessarily.
-- Prioritize important problems over minor style preferences.
-- Keep each section informative but not excessively long.
-- Use Markdown formatting.
+Be accurate, professional and beginner-friendly.
 `;
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: prompt
-    });
+    // Retry up to 3 times if Gemini temporarily fails
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+            const response = await ai.models.generateContent({
+                model: "gemini-3.8-flash",
+                contents: prompt
+            });
 
-    return response.text;
+            return response.text;
+
+        } catch (error) {
+
+            console.error(`Gemini attempt ${attempt} failed:`, error.message);
+
+            if (attempt === 3) {
+                throw error;
+            }
+
+            // Wait before trying again
+            await new Promise(resolve =>
+                setTimeout(resolve, attempt * 2000)
+            );
+        }
+    }
 }
 
 module.exports = generateContent;
