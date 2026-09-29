@@ -23,9 +23,10 @@ Give a clear code review with:
 Be accurate, professional and beginner-friendly.
 `;
 
-    // Retry up to 3 times if Gemini temporarily fails
+    // Retry only temporary 503 errors
     for (let attempt = 1; attempt <= 3; attempt++) {
         try {
+
             const response = await ai.models.generateContent({
                 model: "gemini-3.8-flash",
                 contents: prompt
@@ -35,15 +36,40 @@ Be accurate, professional and beginner-friendly.
 
         } catch (error) {
 
-            console.error(`Gemini attempt ${attempt} failed:`, error.message);
+            console.error(
+                `Gemini attempt ${attempt} failed:`,
+                error.message
+            );
 
+            // Get status code
+            let statusCode = error?.status;
+
+            try {
+                const parsedError = JSON.parse(error.message);
+                statusCode = parsedError?.error?.code || statusCode;
+            } catch (e) {
+                // message was not JSON
+            }
+
+            // 429 = quota exceeded
+            // Don't retry because another request can make the quota problem worse
+            if (statusCode === 429) {
+                throw error;
+            }
+
+            // Retry only when Gemini is temporarily unavailable
+            if (statusCode !== 503) {
+                throw error;
+            }
+
+            // Last attempt
             if (attempt === 3) {
                 throw error;
             }
 
-            // Wait before trying again
+            // Wait before retrying
             await new Promise(resolve =>
-                setTimeout(resolve, attempt * 2000)
+                setTimeout(resolve, attempt * 5000)
             );
         }
     }
